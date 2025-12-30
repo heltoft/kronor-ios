@@ -52,7 +52,7 @@ struct TrustlyPaymentView: View {
                             TrustlyWebView(
                                 checkoutURL: url.absoluteString,
                                 onSuccess: {
-                                    Self.logger.info("Truslty success")
+                                    Self.logger.info("Trustly success")
                                     isShowingTrustly = false
                                 },
                                 onError: {
