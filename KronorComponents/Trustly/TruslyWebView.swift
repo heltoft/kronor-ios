@@ -23,7 +23,7 @@ struct TrustlyWebView: UIViewRepresentable {
         // Initialize the view.
         let size = geometry.size
         guard let trustlyWebView = TrustlyWKWebView(checkoutUrl: checkoutURL, frame: CGRect(x: 0, y: 0, width: size.width, height: size.height)) else {
-            fatalError("Could not initialize Trustly view")
+            fatalError("Could not initialize TrustlyWKWebView. checkoutURL='\(checkoutURL)'. This may indicate an invalid URL format or a Trustly iOS SDK initialization/configuration issue.")
         }
         
         // Connect the library's event handlers to our SwiftUI closures
