@@ -26,6 +26,15 @@
         "revision" : "0f7964206bd8dbc70f5a30fed0b1db76bfcc1b24",
         "version" : "0.3.0"
       }
+    },
+    {
+      "identity" : "trustlyiossdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/trustly/TrustlyIosSdk",
+      "state" : {
+        "revision" : "2ee7e7d2e9dff110415b369da3bcd3af24e8c368",
+        "version" : "4.0.1"
+      }
     }
   ],
   "version" : 2

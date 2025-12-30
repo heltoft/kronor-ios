@@ -9,6 +9,7 @@
 "completing_payment" = "Maksājuma pabeigšana";
 "creating_swish" = "Creating secure Swish transaction";
 "creating_paypal" = "Droša PayPal maksājuma izveide";
+"creating_trustly" = "Droša Trustly maksājuma izveide";
 "generate_qr" = "QR koda ģenerēšana";
 "opening_swish" = "Opening the swish app";
 "pay_with_swish" = "You can pay with the Swish app now";

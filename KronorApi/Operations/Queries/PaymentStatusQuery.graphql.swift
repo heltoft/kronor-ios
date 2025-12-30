@@ -8,7 +8,7 @@ public extension KronorApi {
     public static let operationName: String = "PaymentStatusQuery"
     public static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query PaymentStatusQuery { paymentRequests(orderBy: { createdAt: ASC }) { __typename waitToken amount status { __typename status } createdAt resultingPaymentId transactionSwishDetails { __typename errorCode returnUrl qrCode } transactionCreditCardDetails { __typename sessionId sessionUrl } transactionMobilePayDetails { __typename sessionId sessionUrl } transactionVippsDetails { __typename sessionId sessionUrl } } }"#
+        #"query PaymentStatusQuery { paymentRequests(orderBy: { createdAt: ASC }) { __typename waitToken amount status { __typename status } createdAt resultingPaymentId transactionSwishDetails { __typename errorCode returnUrl qrCode } transactionCreditCardDetails { __typename sessionId sessionUrl } transactionMobilePayDetails { __typename sessionId sessionUrl } transactionVippsDetails { __typename sessionId sessionUrl } transactionBankTransferDetails { __typename payUrl } } }"#
       ))
 
     public init() {}
@@ -44,6 +44,7 @@ public extension KronorApi {
           .field("transactionCreditCardDetails", [TransactionCreditCardDetail]?.self),
           .field("transactionMobilePayDetails", [TransactionMobilePayDetail]?.self),
           .field("transactionVippsDetails", [TransactionVippsDetail]?.self),
+          .field("transactionBankTransferDetails", [TransactionBankTransferDetail]?.self),
         ] }
 
         public var waitToken: KronorApi.Uuid { __data["waitToken"] }
@@ -61,6 +62,8 @@ public extension KronorApi {
         public var transactionMobilePayDetails: [TransactionMobilePayDetail]? { __data["transactionMobilePayDetails"] }
         /// A computed field, executes function "runtime.get_transaction_vipps_details"
         public var transactionVippsDetails: [TransactionVippsDetail]? { __data["transactionVippsDetails"] }
+        /// A computed field, executes function "runtime.get_transaction_bank_transfer_details"
+        public var transactionBankTransferDetails: [TransactionBankTransferDetail]? { __data["transactionBankTransferDetails"] }
 
         /// PaymentRequest.Status
         ///
@@ -157,6 +160,22 @@ public extension KronorApi {
           public var sessionId: String? { __data["sessionId"] }
           /// Session url
           public var sessionUrl: String? { __data["sessionUrl"] }
+        }
+
+        /// PaymentRequest.TransactionBankTransferDetail
+        ///
+        /// Parent Type: `BankTransferDetails`
+        public struct TransactionBankTransferDetail: KronorApi.SelectionSet {
+          public let __data: DataDict
+          public init(_dataDict: DataDict) { __data = _dataDict }
+
+          public static var __parentType: any ApolloAPI.ParentType { KronorApi.Objects.BankTransferDetails }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
+            .field("payUrl", String?.self),
+          ] }
+
+          public var payUrl: String? { __data["payUrl"] }
         }
       }
     }

@@ -8,8 +8,10 @@
 "secure_connection" = "Opretter sikker forbindelse";                                                                                                             
 "completing_payment" = "Gennemfører betaling";
 "creating_swish" = "Creating secure Swish transaction";
-"creating_paypal" = "Opretter sikker PayPal transaktion";                                                                                                  
-"generate_qr" = "Genererer QR kode";                                                                                                                                   
+"creating_paypal" = "Opretter sikker PayPal transaktion";
+"creating_trustly" = "Opretter sikker Trustly transaktion";
+
+"generate_qr" = "Genererer QR kode";
 "opening_swish" = "Opening the swish app";                                                                                                                           
 "pay_with_swish" = "You can pay with the Swish app now";                                                                                                  
 "enter_phone" = "Indtast telefonnummer";                                                                                                                               

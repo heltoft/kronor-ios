@@ -40,6 +40,10 @@ let package = Package(
             url: "https://github.com/fingerprintjs/fingerprintjs-ios",
             .upToNextMajor(from: "1.0.0")
         ),
+        .package(
+            url: "https://github.com/trustly/TrustlyIosSdk",
+            .upToNextMajor(from: "4.0.1")
+        ),
     ],
     targets: [
         .target(
@@ -65,6 +69,7 @@ let package = Package(
                 .target(name: "KronorApi"),
                 .product(name: "Apollo", package: "apollo-ios"),
                 .product(name: "StateMachine", package: "StateMachine"),
+                .product(name: "TrustlyIosSdk", package: "TrustlyIosSdk")
             ],
             path: "./KronorComponents",
             resources: [.process("Assets")]

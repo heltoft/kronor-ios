@@ -5,8 +5,6 @@ import ApolloAPI
 
 public extension KronorApi {
   enum PaymentStatusEnum: String, EnumType {
-    /// Payment is ACCEPTED. Money is likely debited from the customer now. Wait for the PAID status before shipping the order
-    case accepted = "ACCEPTED"
     /// Payment is authorized. Can be captured now.
     case authorized = "AUTHORIZED"
     /// Payment was cancelled.

@@ -24,5 +24,8 @@ subscription PaymentStatus {
                 sessionId
                 sessionUrl
             }
+            transactionBankTransferDetails {
+                payUrl
+            }
         }
 }

@@ -9,6 +9,7 @@
 "completing_payment" = "Slutförd betalning.";
 "creating_swish" = "Upprättar säker överföring med Swish.";
 "creating_paypal" = "Upprättar säker överföring med PayPal.";
+"creating_trustly" = "Upprättar säker överföring med Trustly.";
 "generate_qr" = "Genererar QR-kod.";
 "opening_swish" = "Öppna Swish-appen.";
 "pay_with_swish" = "Du kan betala med Swish-appen nu.";

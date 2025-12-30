@@ -8,7 +8,8 @@
 "secure_connection" = "Saugaus ryšio užmezgimas";
 "completing_payment" = "Mokėjimas užbaigiamas";
 "creating_swish" = "Creating secure Swish transaction";
-"creating_paypal" = "Inicijuojamas saugus mokėjimas su Paypal ";
+"creating_paypal" = "Inicijuojamas saugus mokėjimas su Paypal";
+"creating_trustly" = "Inicijuojamas saugus mokėjimas su Trustly";
 "generate_qr" = "Generuojamas QR kodas";
 "opening_swish" = "Opening the swish app";
 "pay_with_swish" = "You can pay with the Swish app now";

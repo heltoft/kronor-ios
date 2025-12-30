@@ -30,6 +30,8 @@ public extension KronorApi {
     public static func objectType(forTypename typename: String) -> ApolloAPI.Object? {
       switch typename {
       case "AddSessionDeviceInformationResult": return KronorApi.Objects.AddSessionDeviceInformationResult
+      case "BankTransferDetails": return KronorApi.Objects.BankTransferDetails
+      case "BankTransferPaymentResult": return KronorApi.Objects.BankTransferPaymentResult
       case "CreditCardDetails": return KronorApi.Objects.CreditCardDetails
       case "CreditCardPaymentResult": return KronorApi.Objects.CreditCardPaymentResult
       case "CurrentPaymentStatus": return KronorApi.Objects.CurrentPaymentStatus

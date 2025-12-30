@@ -9,6 +9,7 @@
 "completing_payment" = "Zahlung abschließen";
 "creating_swish" = "Creating secure Swish transaction";
 "creating_paypal" = "Erstellen einer sicheren PayPal-Transaktion";
+"creating_trustly" = "Erstellen einer sicheren Trustly-Transaktion";
 "generate_qr" = "QR-Code generieren";
 "opening_swish" = "Opening the swish app";
 "pay_with_swish" = "You can pay with the Swish app now";

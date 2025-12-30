@@ -9,6 +9,7 @@
 "completing_payment" = "Klára greiðslu";
 "creating_swish" = "Creating secure Swish transaction";
 "creating_paypal" = "Býr til örugga PayPal greiðslu";
+"creating_trustly" = "Býr til örugga Trustly greiðslu";
 "generate_qr" = "Býr til QR kóða";
 "opening_swish" = "Opening the swish app";
 "pay_with_swish" = "You can pay with the Swish app now";
