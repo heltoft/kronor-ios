@@ -19,7 +19,7 @@ class TrustlyPaymentViewModel: ObservableObject {
     private var returnURL: URL
 
     var payURL: URL? {
-        if let raw = self.paymenRequest?.transactionBankTransferDetails?[0].payUrl {
+        if let raw = self.paymenRequest?.transactionBankTransferDetails?.first?.payUrl {
            let url = URL(string: raw)
            return url
         }
