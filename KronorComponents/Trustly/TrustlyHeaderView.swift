@@ -9,13 +9,10 @@ struct TrustlyHeaderView: View {
     @Environment(\.colorScheme) var currentMode
 
     var body: some View {
-        VStack {
-            Image(uiImage: currentMode == .dark ? Self.trustlyLogoDark : Self.trustlyLogo)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-        }.frame(width: 150,
-                height: 250,
-                alignment: .leading)
+        Image(uiImage: currentMode == .dark ? Self.trustlyLogoDark : Self.trustlyLogo)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 150)
     }
 }
 
