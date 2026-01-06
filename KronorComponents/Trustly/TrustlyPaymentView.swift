@@ -51,6 +51,7 @@ struct TrustlyPaymentView: View {
                         GeometryReader { proxy in
                             TrustlyWebView(
                                 checkoutURL: url.absoluteString,
+                                geometry: .constant(proxy),
                                 onSuccess: {
                                     Self.logger.info("Trustly success")
                                     isShowingTrustly = false
@@ -68,8 +69,7 @@ struct TrustlyPaymentView: View {
                                     Task {
                                         await self.viewModel.transition(.cancel)
                                     }
-                                },
-                                geometry: proxy
+                                }
                             )
                         }
                     }

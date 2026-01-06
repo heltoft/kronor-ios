@@ -4,26 +4,50 @@ import TrustlyIosSdk
 import os
 
 struct TrustlyWebView: UIViewRepresentable {
+    typealias UIViewType = UIView
     
     private static let logger = Logger(
             subsystem: Bundle.main.bundleIdentifier!,
             category: String(describing: TrustlyWebView.self)
     )
     
-    let checkoutURL: String
+    private let checkoutURL: String
     
     // closures to handle events back in your main SwiftUI view
-    var onSuccess: (() -> Void)?
-    var onError: (() -> Void)?
-    var onAbort: (() -> Void)?
+    private let onSuccess: (() -> Void)?
+    private let onError: (() -> Void)?
+    private let onAbort: (() -> Void)?
 
-    let geometry: GeometryProxy
+    private let geometry: Binding<GeometryProxy>
+    
+    private var preferredFrame: CGRect {
+            CGRect(
+                x: 0,
+                y: 0,
+                width: geometry.wrappedValue.size.width,
+                height: geometry.wrappedValue.size.height
+            )
+    }
+    
+    init(
+            checkoutURL: String,
+            geometry: Binding<GeometryProxy>,
+            onSuccess: (() -> Void)?,
+            onError: (() -> Void)?,
+            onAbort: (() -> Void)?
+        ) {
+            self.geometry = geometry
+            self.checkoutURL = checkoutURL
+            self.onSuccess = onSuccess
+            self.onError = onError
+            self.onAbort = onAbort
+        }
 
-    func makeUIView(context: Context) -> TrustlyWKWebView {
+    func makeUIView(context: Context) -> UIView {
         // Initialize the view.
-        let size = geometry.size
-        guard let trustlyWebView = TrustlyWKWebView(checkoutUrl: checkoutURL, frame: CGRect(x: 0, y: 0, width: size.width, height: size.height)) else {
-            fatalError("Could not initialize TrustlyWKWebView. checkoutURL='\(checkoutURL)'. This may indicate an invalid URL format or a Trustly iOS SDK initialization/configuration issue.")
+        guard let trustlyWebView = TrustlyWKWebView(checkoutUrl: checkoutURL, frame: preferredFrame) else {
+            Self.logger.error("Could not initialize TrustlyWKWebView. checkoutURL='\(checkoutURL)'. This may indicate an invalid URL format or a Trustly iOS SDK initialization/configuration issue.")
+            return UIView()
         }
         
         // Connect the library's event handlers to our SwiftUI closures
@@ -42,7 +66,7 @@ struct TrustlyWebView: UIViewRepresentable {
         return trustlyWebView
     }
     
-    func updateUIView(_ uiView: TrustlyIosSdk.TrustlyWKWebView, context: Context) {
-        Self.logger.info("updating view \(String(describing: uiView.frame))")
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+        uiView.subviews.compactMap { $0 as? WKWebView }.first?.frame = preferredFrame
     }
 }
