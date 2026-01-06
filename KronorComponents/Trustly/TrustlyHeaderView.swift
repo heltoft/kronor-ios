@@ -18,11 +18,7 @@ struct TrustlyHeaderView: View {
 
 struct TrustlyHeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        TrustlyHeaderView()
-            .previewDisplayName("Logo")
-
-        TrustlyHeaderView()
-            .preferredColorScheme(.dark)
-            .previewDisplayName("Logo Dark")
+       TrustlyHeaderView()
+           .previewDisplayName("Logo")
     }
 }
