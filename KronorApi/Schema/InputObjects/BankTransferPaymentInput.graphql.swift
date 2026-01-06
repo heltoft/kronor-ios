@@ -4,8 +4,8 @@
 import ApolloAPI
 
 public extension KronorApi {
-  /// Arguments for creating a new MobilePay payment
-  struct MobilePayPaymentInput: InputObject {
+  /// Arguments for creating a new direct debit payment
+  struct BankTransferPaymentInput: InputObject {
     public private(set) var __data: InputDict
 
     public init(_ data: InputDict) {
@@ -13,17 +13,43 @@ public extension KronorApi {
     }
 
     public init(
+      aspspId: GraphQLNullable<Bigint> = nil,
+      executionDate: GraphQLNullable<String> = nil,
+      flow: GraphQLNullable<String> = nil,
       idempotencyKey: String,
       merchantReturnUrl: GraphQLNullable<String> = nil,
-      returnUrl: String,
-      userFlow: GraphQLNullable<GraphQLEnum<MobilePayUserFlow>> = nil
+      requestRedirectState: GraphQLNullable<String> = nil,
+      returnUrl: String
     ) {
       __data = InputDict([
+        "aspspId": aspspId,
+        "executionDate": executionDate,
+        "flow": flow,
         "idempotencyKey": idempotencyKey,
         "merchantReturnUrl": merchantReturnUrl,
-        "returnUrl": returnUrl,
-        "userFlow": userFlow
+        "requestRedirectState": requestRedirectState,
+        "returnUrl": returnUrl
       ])
+    }
+
+    /// The ID of the ASPSP to use for this payment.
+    public var aspspId: GraphQLNullable<Bigint> {
+      get { __data["aspspId"] }
+      set { __data["aspspId"] = newValue }
+    }
+
+    /// A date in yyyy-mm-dd format, nullable, determines the date to execute this payment.
+    /// Has to be past today's date, up to 90 days in the future.
+    public var executionDate: GraphQLNullable<String> {
+      get { __data["executionDate"] }
+      set { __data["executionDate"] = newValue }
+    }
+
+    /// Payment flow, either 'ecom' or 'mcom'.
+    /// This determines if the flow is web flow or app flow for the Bank Transfer payment.
+    public var flow: GraphQLNullable<String> {
+      get { __data["flow"] }
+      set { __data["flow"] = newValue }
     }
 
     /// Idempotency key is required to prevent double processing a request.
@@ -50,19 +76,18 @@ public extension KronorApi {
       set { __data["merchantReturnUrl"] = newValue }
     }
 
+    /// State string passed back as a parameter in the return URL.
+    public var requestRedirectState: GraphQLNullable<String> {
+      get { __data["requestRedirectState"] }
+      set { __data["requestRedirectState"] = newValue }
+    }
+
     /// The url to return to after the payment is done. If the payment
     /// screen is opened on a separate window, customer will be redirected
     /// here on payment success or error.
     public var returnUrl: String {
       get { __data["returnUrl"] }
       set { __data["returnUrl"] = newValue }
-    }
-
-    /// How the end customer is expected to interact with MobilePay. Must be
-    /// set if the preferredGateway is "KRONOR".
-    public var userFlow: GraphQLNullable<GraphQLEnum<MobilePayUserFlow>> {
-      get { __data["userFlow"] }
-      set { __data["userFlow"] = newValue }
     }
   }
 

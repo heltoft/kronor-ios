@@ -1,14 +1,15 @@
 "creating_mobilepay" = "Creating secure MobilePay transaction";
-"payment_error_retry_later" = "Kunde inte slutföra betalning på grund av fel. Vänligen prova igen om en stund.";
+"payment_error_retry_later" = "Kunde inte slutföra betalningen på grund av fel. Vänligen prova igen om en stund.";
 "payment_completed" = "Betalning slutförd.";
 "cancel" = "avbryt";
 "or" = "eller";
 "payment_rejected" = "Betalning misslyckad.";
 "try_again" = "försök igen?";
-"secure_connection" = "Upprättar säker kontakt.";
-"completing_payment" = "Slutförd betalning.";
-"creating_swish" = "Upprättar säker överföring med Swish.";
-"creating_paypal" = "Upprättar säker överföring med PayPal.";
+"secure_connection" = "Skapar säker anslutning.";
+"completing_payment" = "Slutför betalning.";
+"creating_swish" = "Skapar säker Swish-betalning.";
+"creating_paypal" = "Skapar säker PayPal-betalning.";
+"creating_trustly" = "Skapar säker Trustly-betalning.";
 "generate_qr" = "Genererar QR-kod.";
 "opening_swish" = "Öppna Swish-appen.";
 "pay_with_swish" = "Du kan betala med Swish-appen nu.";
@@ -23,4 +24,4 @@
 "cancel_payment" = "Avbryt betalning?";
 "continue" = "Fortsätt.";
 "confirm_cancellation" = "Ja, avbryt.";
-"creating_secure_transaction" = "Upprättar säker överföring.";
+"creating_secure_transaction" = "Skapar säker betalning.";

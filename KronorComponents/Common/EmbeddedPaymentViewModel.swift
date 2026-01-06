@@ -289,7 +289,6 @@ class EmbeddedPaymentViewModel: ObservableObject {
                     if (request.status?.contains {
                         $0.status == KronorApi.PaymentStatusEnum.paid
                         || $0.status == KronorApi.PaymentStatusEnum.authorized
-                        || $0.status == KronorApi.PaymentStatusEnum.accepted
                         || $0.status == KronorApi.PaymentStatusEnum.flowCompleted
                     }) ?? false {
                         Task { [weak self] in

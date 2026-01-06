@@ -15,12 +15,14 @@ public extension KronorApi {
     public init(
       idempotencyKey: String,
       merchantReturnUrl: GraphQLNullable<String> = nil,
-      returnUrl: String
+      returnUrl: String,
+      userFlow: GraphQLNullable<GraphQLEnum<MobilePayUserFlow>> = nil
     ) {
       __data = InputDict([
         "idempotencyKey": idempotencyKey,
         "merchantReturnUrl": merchantReturnUrl,
-        "returnUrl": returnUrl
+        "returnUrl": returnUrl,
+        "userFlow": userFlow
       ])
     }
 
@@ -54,6 +56,13 @@ public extension KronorApi {
     public var returnUrl: String {
       get { __data["returnUrl"] }
       set { __data["returnUrl"] = newValue }
+    }
+
+    /// How the end customer is expected to interact with MobilePay. Must be
+    /// set if the preferredGateway is "KRONOR".
+    public var userFlow: GraphQLNullable<GraphQLEnum<MobilePayUserFlow>> {
+      get { __data["userFlow"] }
+      set { __data["userFlow"] = newValue }
     }
   }
 

@@ -24,5 +24,8 @@ query PaymentStatusQuery {
                 sessionId
                 sessionUrl
             }
+            transactionBankTransferDetails {
+                payUrl
+            }
         }
 }

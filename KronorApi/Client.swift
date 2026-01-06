@@ -93,7 +93,16 @@ public extension KronorApi {
             await sendMutation(client: client, mutation: KronorApi.PayPalPaymentMutation(payment: input, deviceInfo: deviceInfo)) {
                 $0.newPayPalPayment.paymentId
             }
-        }
+    }
+
+    static func createBankPaymentRequest(
+        client: ApolloClient,
+        input: KronorApi.BankTransferPaymentInput,
+        deviceInfo: KronorApi.AddSessionDeviceInformationInput) async -> Result<String, KronorError> {
+            await sendMutation(client: client, mutation: KronorApi.BankTransferPaymentMutation(payment: input, deviceInfo: deviceInfo)) {
+                $0.newBankTransferPayment.paymentId
+            }
+    }
 }
 
 
