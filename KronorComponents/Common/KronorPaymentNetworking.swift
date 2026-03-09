@@ -42,20 +42,16 @@ class KronorPaymentNetworking: PaymentNetworking {
         }
     }
 
-    init(
-        env: Kronor.Environment,
-        token: String,
-        device: Kronor.Device?
-    ) {
-        self.env = env
+    init(configuration: ComponentConfiguration) {
+        self.env = configuration.env
         self.client = KronorApi.makeGraphQLClient(
-            env: env,
-            token: token
+            env: configuration.env,
+            token: configuration.sessionToken
         )
 
         self.pollingManager = PollingManager(pollingInterval: 1)
 
-        self.state = .init(device: device)
+        self.state = .init(device: configuration.device)
     }
 
     func establishWebSocketConnection() async throws -> NWConnection {

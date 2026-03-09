@@ -4,23 +4,17 @@ import Kronor
 public struct TrustlyComponent: View {
     let viewModel: TrustlyPaymentViewModel
     
-    public init(env: Kronor.Environment,
-                sessionToken: String,
-                returnURL: URL,
-                device: Kronor.Device? = nil,
-                onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-                onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+    public init(
+        configuration: ComponentConfiguration,
+        onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
+        onPaymentSuccess: @escaping (_ paymentId: String) -> ()
     ) {
         let machine = EmbeddedPaymentStatechart.makeStateMachine()
-        let networking = KronorTrustlyPaymentNetworking(
-            env: env,
-            token: sessionToken,
-            device: device
-        )
+        let networking = KronorTrustlyPaymentNetworking(configuration: configuration)
         let viewModel = TrustlyPaymentViewModel(
             stateMachine: machine,
             networking: networking,
-            returnURL: returnURL,
+            returnURL: configuration.returnURL,
             onPaymentFailure: onPaymentFailure,
             onPaymentSuccess: onPaymentSuccess
         )
@@ -40,9 +34,7 @@ public struct TrustlyComponent: View {
 struct TrustlyComponent_Previews: PreviewProvider {
     static var previews: some View {
         TrustlyComponent(
-            env: Preview.env,
-            sessionToken: Preview.token,
-            returnURL: Preview.returnURL,
+            configuration: Preview.configuration,
             onPaymentFailure: { reason in
                 print("failed: \(reason)")
             }

@@ -29,12 +29,15 @@ struct CheckoutView: View {
             Spacer()
 
             SwishComponent(
-                sessionToken: sessionToken,
-                returnURL: URL(string: "myapp://")!,
+                configuration: .init(
+                    env: .production,
+                    sessionToken: sessionToken,
+                    returnURL: URL(string: "myapp://")!
+                ),
                 onPaymentFailure: {
                     // your custom logic here
                 },
-                onPaymentSuccess: {paymentId in
+                onPaymentSuccess: { paymentId in
                     // your custom logic here
                 }
             )

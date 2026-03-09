@@ -69,14 +69,13 @@ class EmbeddedPaymentViewModel: ObservableObject {
     @Published var state: EmbeddedPaymentStatechart.State
     @Published var embeddedSiteURL: URL?
 
-    init(env: Kronor.Environment,
-         sessionToken: String,
-         stateMachine: EmbeddedPaymentStatechart.EmbeddedPaymentStateMachine,
-         networking: some EmbeddedPaymentNetworking,
-         paymentMethod: SupportedEmbeddedMethod,
-         returnURL: URL,
-         onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-         onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+    init(
+        configuration: ComponentConfiguration,
+        stateMachine: EmbeddedPaymentStatechart.EmbeddedPaymentStateMachine,
+        networking: some EmbeddedPaymentNetworking,
+        paymentMethod: SupportedEmbeddedMethod,
+        onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
+        onPaymentSuccess: @escaping (_ paymentId: String) -> ()
     ) {
         self.stateMachine = stateMachine
         self.networking = networking
@@ -85,20 +84,20 @@ class EmbeddedPaymentViewModel: ObservableObject {
         self.onPaymentFailure = onPaymentFailure
         self.paymentMethod = paymentMethod
 
-        let gatewayURL = env.gatewayURL
+        let gatewayURL = configuration.env.gatewayURL
         var components = URLComponents()
         components.scheme = gatewayURL.scheme
         components.host = gatewayURL.host
         components.path = "/payment"
         components.queryItems = [
-            URLQueryItem(name: "env", value: env.name),
+            URLQueryItem(name: "env", value: configuration.env.name),
             URLQueryItem(name: "paymentMethod", value: paymentMethod.getName()),
-            URLQueryItem(name: "token", value: sessionToken),
-            URLQueryItem(name: "merchantReturnUrl", value: returnURL.absoluteString)
+            URLQueryItem(name: "token", value: configuration.sessionToken),
+            URLQueryItem(name: "merchantReturnUrl", value: configuration.returnURL.absoluteString)
         ]
 
         self.sessionURL = components.url!
-        self.returnURL = returnURL
+        self.returnURL = configuration.returnURL
         
         components.path = "/" + paymentMethod.getName().lowercased() + "-redirect"
         self.intermediateRedirectURL = components.url!

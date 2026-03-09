@@ -11,26 +11,18 @@ import Kronor
 public struct P24Component: View {
     let viewModel: EmbeddedPaymentViewModel
     
-    public init(env: Kronor.Environment,
-                sessionToken: String,
-                returnURL: URL,
-                device: Kronor.Device? = nil,
-                onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-                onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+    public init(
+        configuration: ComponentConfiguration,
+        onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
+        onPaymentSuccess: @escaping (_ paymentId: String) -> ()
     ) {
         let machine = EmbeddedPaymentStatechart.makeStateMachine()
-        let networking = KronorEmbeddedPaymentNetworking(
-            env: env,
-            token: sessionToken,
-            device: device
-        )
+        let networking = KronorEmbeddedPaymentNetworking(configuration: configuration)
         let viewModel = EmbeddedPaymentViewModel(
-            env: env,
-            sessionToken: sessionToken,
+            configuration: configuration,
             stateMachine: machine,
             networking: networking,
             paymentMethod: .p24,
-            returnURL: returnURL,
             onPaymentFailure: onPaymentFailure,
             onPaymentSuccess: onPaymentSuccess
         )
@@ -55,9 +47,7 @@ public struct P24Component: View {
 struct P24Component_Previews: PreviewProvider {
     static var previews: some View {
         P24Component(
-            env: Preview.env,
-            sessionToken: Preview.token,
-            returnURL: Preview.returnURL,
+            configuration: Preview.configuration,
             onPaymentFailure: { reason in
                 print("failed: \(reason)")
             }

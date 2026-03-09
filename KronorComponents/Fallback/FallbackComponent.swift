@@ -11,27 +11,19 @@ import Kronor
 public struct FallbackComponent: View {
     let viewModel: EmbeddedPaymentViewModel
     
-    public init(env: Kronor.Environment,
-                sessionToken: String,
-                paymentMethodName: String,
-                returnURL: URL,
-                device: Kronor.Device? = nil,
-                onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-                onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+    public init(
+        configuration: ComponentConfiguration,
+        paymentMethodName: String,
+        onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
+        onPaymentSuccess: @escaping (_ paymentId: String) -> ()
     ) {
         let machine = EmbeddedPaymentStatechart.makeStateMachine()
-        let networking = KronorEmbeddedPaymentNetworking(
-            env: env,
-            token: sessionToken,
-            device: device
-        )
+        let networking = KronorEmbeddedPaymentNetworking(configuration: configuration)
         let viewModel = EmbeddedPaymentViewModel(
-            env: env,
-            sessionToken: sessionToken,
+            configuration: configuration,
             stateMachine: machine,
             networking: networking,
             paymentMethod: .fallback(name: paymentMethodName),
-            returnURL: returnURL,
             onPaymentFailure: onPaymentFailure,
             onPaymentSuccess: onPaymentSuccess
         )
@@ -56,10 +48,8 @@ public struct FallbackComponent: View {
 struct FallbackComponent_Previews: PreviewProvider {
     static var previews: some View {
         FallbackComponent(
-            env: Preview.env,
-            sessionToken: Preview.token,
+            configuration: Preview.configuration,
             paymentMethodName: "swish",
-            returnURL: Preview.returnURL,
             onPaymentFailure: { reason in
                 print("failed: \(reason)")
             }
