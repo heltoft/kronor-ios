@@ -33,14 +33,10 @@ struct CheckoutView: View {
                     env: .production,
                     sessionToken: sessionToken,
                     returnURL: URL(string: "myapp://")!
-                ),
-                onPaymentFailure: {
-                    // your custom logic here
-                },
-                onPaymentSuccess: { paymentId in
-                    // your custom logic here
-                }
-            )
+                )
+            ) { result in
+                // Handle payment result here
+            }
 
             Spacer()
         }

@@ -40,9 +40,8 @@ class SwishPaymentViewModel: ObservableObject {
         return nil
     }
     
-    private var returnURL: URL
-    private var onPaymentFailure: (_ reason: FailureReason) -> ()
-    private var onPaymentSuccess: (_ paymentId: String) -> ()
+    private let returnURL: URL
+    private let paymentResultHandler: PaymentResultHandler
     
     @Published var state: SwishStatechart.State
     
@@ -56,15 +55,13 @@ class SwishPaymentViewModel: ObservableObject {
         stateMachine: SwishStatechart.SwishStateMachine,
         networking: some SwishPaymentNetworking,
         returnURL: URL,
-        onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-        onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+        paymentResultHandler: @escaping PaymentResultHandler
     ) {
         self.stateMachine = stateMachine
         self.networking = networking
         self.state = stateMachine.state
         self.returnURL = returnURL
-        self.onPaymentSuccess = onPaymentSuccess
-        self.onPaymentFailure = onPaymentFailure
+        self.paymentResultHandler = paymentResultHandler
     }
 
     func transition(_ event: SwishStatechart.Event) async {
@@ -129,14 +126,14 @@ class SwishPaymentViewModel: ObservableObject {
             Self.logger.trace("performing notifyPaymentFailure")
             self.subscription?.cancel()
             await MainActor.run {
-                self.onPaymentFailure(.declined)
+                self.paymentResultHandler(.failure(.declined))
             }
         
         case .cancelFlow:
             Self.logger.trace("performing cancelFlow")
             self.subscription?.cancel()
             await MainActor.run {
-                self.onPaymentFailure(.cancelled)
+                self.paymentResultHandler(.failure(.cancelled))
             }
 
             
@@ -145,7 +142,7 @@ class SwishPaymentViewModel: ObservableObject {
             self.subscription?.cancel()
             if let paymentId = self.paymenRequest?.resultingPaymentId {
                 await MainActor.run {
-                    self.onPaymentSuccess(paymentId)
+                    self.paymentResultHandler(.success(paymentId))
                 }
             } else {
                 Self.logger.error("could not find resultingPaymentId before calling onPaymentSuccess")

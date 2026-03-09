@@ -13,8 +13,7 @@ public struct SwishComponent: View {
     
     public init(
         configuration: ComponentConfiguration,
-        onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-        onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+        paymentResultHandler: @escaping PaymentResultHandler
     ) {
         let machine = SwishStatechart.makeStateMachine()
         let networking = KronorSwishPaymentNetworking(configuration: configuration)
@@ -22,8 +21,7 @@ public struct SwishComponent: View {
             stateMachine: machine,
             networking: networking,
             returnURL: configuration.returnURL,
-            onPaymentFailure: onPaymentFailure,
-            onPaymentSuccess: onPaymentSuccess
+            paymentResultHandler: paymentResultHandler
         )
 
     }
@@ -37,11 +35,7 @@ struct SwishComponent_Previews: PreviewProvider {
     static var previews: some View {
         SwishComponent(
             configuration: Preview.configuration,
-            onPaymentFailure: { reason in
-                print("failed: \(reason)")
-            }
-        ) { paymentId in
-            print("done: \(paymentId)")
-        }
+            paymentResultHandler: Preview.paymentResultHandler
+        )
     }
 }

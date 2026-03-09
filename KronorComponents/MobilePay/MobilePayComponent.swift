@@ -13,8 +13,7 @@ public struct MobilePayComponent: View {
     
     public init(
         configuration: ComponentConfiguration,
-        onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-        onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+        paymentResultHandler: @escaping PaymentResultHandler
     ) {
         let machine = EmbeddedPaymentStatechart.makeStateMachine()
         let networking = KronorEmbeddedPaymentNetworking(configuration: configuration)
@@ -23,8 +22,7 @@ public struct MobilePayComponent: View {
             stateMachine: machine,
             networking: networking,
             paymentMethod: .mobilePay,
-            onPaymentFailure: onPaymentFailure,
-            onPaymentSuccess: onPaymentSuccess
+            paymentResultHandler: paymentResultHandler
         )
 
         self.viewModel = viewModel
@@ -48,11 +46,7 @@ struct MobilePayComponent_Previews: PreviewProvider {
     static var previews: some View {
         MobilePayComponent(
             configuration: Preview.configuration,
-            onPaymentFailure: { reason in
-                print("failed: \(reason)")
-            }
-        ) { paymentId in
-            print("done: \(paymentId)")
-        }
+            paymentResultHandler: Preview.paymentResultHandler
+        )
     }
 }

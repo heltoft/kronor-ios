@@ -13,8 +13,7 @@ public struct CreditCardComponent: View {
     
     public init(
         configuration: ComponentConfiguration,
-        onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-        onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+        paymentResultHandler: @escaping PaymentResultHandler
     ) {
         let machine = EmbeddedPaymentStatechart.makeStateMachine()
         let networking = KronorEmbeddedPaymentNetworking(configuration: configuration)
@@ -23,8 +22,7 @@ public struct CreditCardComponent: View {
             stateMachine: machine,
             networking: networking,
             paymentMethod: .creditCard,
-            onPaymentFailure: onPaymentFailure,
-            onPaymentSuccess: onPaymentSuccess
+            paymentResultHandler: paymentResultHandler
         )
 
         self.viewModel = viewModel
@@ -45,11 +43,7 @@ struct CreditCardComponent_Previews: PreviewProvider {
     static var previews: some View {
         CreditCardComponent(
             configuration: Preview.configuration,
-            onPaymentFailure: { reason in
-                print("failed: \(reason)")
-            }
-        ) { paymentId in
-            print("done: \(paymentId)")
-        }
+            paymentResultHandler: Preview.paymentResultHandler
+        )
     }
 }

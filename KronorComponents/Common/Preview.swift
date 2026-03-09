@@ -20,6 +20,14 @@ enum Preview {
     static let token = "dummy"
     static let returnURL = URL(string: "io.kronortest://")!
     static let device: Kronor.Device? = nil
+    static let paymentResultHandler: PaymentResultHandler = { result in
+        switch result {
+        case .success(let paymentId):
+            print("Payment successful: \(paymentId)")
+        case .failure(let error):
+            print("Payment failed: \(error)")
+        }
+    }
 
     static func makeEmbeddedPaymentViewModel(
         paymentMethod: SupportedEmbeddedMethod,
@@ -37,8 +45,7 @@ enum Preview {
             stateMachine: machine,
             networking: networking,
             paymentMethod: paymentMethod,
-            onPaymentFailure: { reason in },
-            onPaymentSuccess: { paymentId in }
+            paymentResultHandler: paymentResultHandler
         )
     }
 
@@ -56,8 +63,7 @@ enum Preview {
             stateMachine: machine,
             networking: networking,
             returnURL: returnURL,
-            onPaymentFailure: { reason in },
-            onPaymentSuccess: { paymentId in }
+            paymentResultHandler: paymentResultHandler
         )
     }
 }

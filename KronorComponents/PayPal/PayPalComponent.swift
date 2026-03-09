@@ -13,8 +13,7 @@ public struct PayPalComponent: View {
     
     public init(
         configuration: ComponentConfiguration,
-        onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-        onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+        paymentResultHandler: @escaping PaymentResultHandler
     ) {
         let machine = EmbeddedPaymentStatechart.makeStateMachine()
         let networking = KronorEmbeddedPaymentNetworking(configuration: configuration)
@@ -24,8 +23,7 @@ public struct PayPalComponent: View {
             stateMachine: machine,
             networking: networking,
             paymentMethod: .payPal,
-            onPaymentFailure: onPaymentFailure,
-            onPaymentSuccess: onPaymentSuccess
+            paymentResultHandler: paymentResultHandler
         )
 
         self.viewModel = viewModel
@@ -49,11 +47,7 @@ struct PayPalComponent_Previews: PreviewProvider {
     static var previews: some View {
         PayPalComponent(
             configuration: Preview.configuration,
-            onPaymentFailure: { reason in
-                print("failed: \(reason)")
-            }
-        ) { paymentId in
-            print("done: \(paymentId)")
-        }
+            paymentResultHandler: Preview.paymentResultHandler
+        )
     }
 }

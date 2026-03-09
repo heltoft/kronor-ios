@@ -6,8 +6,7 @@ public struct TrustlyComponent: View {
     
     public init(
         configuration: ComponentConfiguration,
-        onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-        onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+        paymentResultHandler: @escaping PaymentResultHandler
     ) {
         let machine = EmbeddedPaymentStatechart.makeStateMachine()
         let networking = KronorTrustlyPaymentNetworking(configuration: configuration)
@@ -15,8 +14,7 @@ public struct TrustlyComponent: View {
             stateMachine: machine,
             networking: networking,
             returnURL: configuration.returnURL,
-            onPaymentFailure: onPaymentFailure,
-            onPaymentSuccess: onPaymentSuccess
+            paymentResultHandler: paymentResultHandler
         )
         
         self.viewModel = viewModel
@@ -35,11 +33,7 @@ struct TrustlyComponent_Previews: PreviewProvider {
     static var previews: some View {
         TrustlyComponent(
             configuration: Preview.configuration,
-            onPaymentFailure: { reason in
-                print("failed: \(reason)")
-            }
-        ) { paymentId in
-            print("done: \(paymentId)")
-        }
+            paymentResultHandler: Preview.paymentResultHandler
+        )
     }
 }
