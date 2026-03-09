@@ -18,6 +18,8 @@ public struct ComponentConfiguration {
     public let returnURL: URL
     /// Optional device information for device-specific payment flows.
     public let device: Kronor.Device?
+    /// Whether or not websockets is used for payment status updates.
+    public let isWebsocketsEnabled: Bool
 
     /// Creates a new component configuration.
     /// - Parameters:
@@ -25,15 +27,18 @@ public struct ComponentConfiguration {
     ///   - sessionToken: The session token obtained from the backend.
     ///   - returnURL: The URL to redirect back to after the payment flow.
     ///   - device: Optional device information. Defaults to `nil`.
+    ///   - isWebsocketsEnabled: Whether or not websockets is used for payment status updates. Defaults to `true`.
     public init(
         env: Kronor.Environment,
         sessionToken: String,
         returnURL: URL,
-        device: Kronor.Device? = nil
+        device: Kronor.Device? = nil,
+        isWebsocketsEnabled: Bool = true
     ) {
         self.env = env
         self.sessionToken = sessionToken
         self.returnURL = returnURL
         self.device = device
+        self.isWebsocketsEnabled = isWebsocketsEnabled
     }
 }
