@@ -5,5 +5,5 @@
 //  Created by Niclas Heltoft on 09/03/2026.
 //
 
-/// A payment result handler.
+/// A closure that handles the outcome of a payment flow.
 public typealias PaymentResultHandler = (PaymentResult) -> Void

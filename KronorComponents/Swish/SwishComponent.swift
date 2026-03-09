@@ -8,9 +8,14 @@
 import SwiftUI
 import Kronor
 
+/// A payment component that handles Swish payments.
 public struct SwishComponent: View {
     let viewModel: SwishPaymentViewModel
-    
+
+    /// Creates a new Swish payment component.
+    /// - Parameters:
+    ///   - configuration: The shared component configuration.
+    ///   - paymentResultHandler: A closure called with the payment result.
     public init(
         configuration: ComponentConfiguration,
         paymentResultHandler: @escaping PaymentResultHandler

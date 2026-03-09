@@ -1,9 +1,14 @@
 import SwiftUI
 import Kronor
 
+/// A payment component that handles Trustly payments.
 public struct TrustlyComponent: View {
     let viewModel: TrustlyPaymentViewModel
-    
+
+    /// Creates a new Trustly payment component.
+    /// - Parameters:
+    ///   - configuration: The shared component configuration.
+    ///   - paymentResultHandler: A closure called with the payment result.
     public init(
         configuration: ComponentConfiguration,
         paymentResultHandler: @escaping PaymentResultHandler

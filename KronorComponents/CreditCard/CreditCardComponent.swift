@@ -8,9 +8,14 @@
 import SwiftUI
 import Kronor
 
+/// A payment component that handles credit card payments.
 public struct CreditCardComponent: View {
     let viewModel: EmbeddedPaymentViewModel
-    
+
+    /// Creates a new credit card payment component.
+    /// - Parameters:
+    ///   - configuration: The shared component configuration.
+    ///   - paymentResultHandler: A closure called with the payment result.
     public init(
         configuration: ComponentConfiguration,
         paymentResultHandler: @escaping PaymentResultHandler

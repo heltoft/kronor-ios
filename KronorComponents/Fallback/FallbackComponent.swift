@@ -8,9 +8,15 @@
 import SwiftUI
 import Kronor
 
+/// A generic payment component that handles payment methods without a dedicated component.
 public struct FallbackComponent: View {
     let viewModel: EmbeddedPaymentViewModel
-    
+
+    /// Creates a new fallback payment component.
+    /// - Parameters:
+    ///   - configuration: The shared component configuration.
+    ///   - paymentMethodName: The name of the payment method to use.
+    ///   - paymentResultHandler: A closure called with the payment result.
     public init(
         configuration: ComponentConfiguration,
         paymentMethodName: String,

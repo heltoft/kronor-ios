@@ -8,9 +8,14 @@
 import SwiftUI
 import Kronor
 
+/// A payment component that handles Przelewy24 (P24) payments.
 public struct P24Component: View {
     let viewModel: EmbeddedPaymentViewModel
-    
+
+    /// Creates a new P24 payment component.
+    /// - Parameters:
+    ///   - configuration: The shared component configuration.
+    ///   - paymentResultHandler: A closure called with the payment result.
     public init(
         configuration: ComponentConfiguration,
         paymentResultHandler: @escaping PaymentResultHandler
