@@ -8,31 +8,26 @@
 import SwiftUI
 import Kronor
 
+/// A payment component that handles bank transfer payments.
 public struct BankTransferComponent: View {
     let viewModel: EmbeddedPaymentViewModel
-    
-    public init(env: Kronor.Environment,
-                sessionToken: String,
-                returnURL: URL,
-                device: Kronor.Device? = nil,
-                onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-                onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+
+    /// Creates a new bank transfer payment component.
+    /// - Parameters:
+    ///   - configuration: The shared component configuration.
+    ///   - paymentResultHandler: A closure called with the payment result.
+    public init(
+        configuration: ComponentConfiguration,
+        paymentResultHandler: @escaping PaymentResultHandler
     ) {
         let machine = EmbeddedPaymentStatechart.makeStateMachine()
-        let networking = KronorEmbeddedPaymentNetworking(
-            env: env,
-            token: sessionToken,
-            device: device
-        )
+        let networking = KronorEmbeddedPaymentNetworking(configuration: configuration)
         let viewModel = EmbeddedPaymentViewModel(
-            env: env,
-            sessionToken: sessionToken,
+            configuration: configuration,
             stateMachine: machine,
             networking: networking,
             paymentMethod: .bankTransfer,
-            returnURL: returnURL,
-            onPaymentFailure: onPaymentFailure,
-            onPaymentSuccess: onPaymentSuccess
+            paymentResultHandler: paymentResultHandler
         )
         
         self.viewModel = viewModel
@@ -55,14 +50,8 @@ public struct BankTransferComponent: View {
 struct BankTransferComponent_Previews: PreviewProvider {
     static var previews: some View {
         BankTransferComponent(
-            env: Preview.env,
-            sessionToken: Preview.token,
-            returnURL: Preview.returnURL,
-            onPaymentFailure: { reason in
-                print("failed: \(reason)")
-            }
-        ) { paymentId in
-            print("done: \(paymentId)")
-        }
+            configuration: Preview.configuration,
+            paymentResultHandler: Preview.paymentResultHandler
+        )
     }
 }

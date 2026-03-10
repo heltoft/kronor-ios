@@ -10,10 +10,24 @@ import Kronor
 import KronorApi
 
 enum Preview {
+    static let configuration: ComponentConfiguration = .init(
+        env: env,
+        sessionToken: token,
+        returnURL: returnURL,
+        device: device
+    )
     static let env = Kronor.Environment.sandbox
     static let token = "dummy"
     static let returnURL = URL(string: "io.kronortest://")!
     static let device: Kronor.Device? = nil
+    static let paymentResultHandler: PaymentResultHandler = { result in
+        switch result {
+        case .success(let paymentId):
+            print("Payment successful: \(paymentId)")
+        case .failure(let error):
+            print("Payment failed: \(error)")
+        }
+    }
 
     static func makeEmbeddedPaymentViewModel(
         paymentMethod: SupportedEmbeddedMethod,
@@ -25,20 +39,13 @@ enum Preview {
         } else {
             machine = EmbeddedPaymentStatechart.makeStateMachine()
         }
-        let networking = KronorEmbeddedPaymentNetworking(
-            env: env,
-            token: token,
-            device: device
-        )
+        let networking = KronorEmbeddedPaymentNetworking(configuration: configuration)
         return EmbeddedPaymentViewModel(
-            env: env,
-            sessionToken: token,
+            configuration: configuration,
             stateMachine: machine,
             networking: networking,
             paymentMethod: paymentMethod,
-            returnURL: returnURL,
-            onPaymentFailure: { reason in },
-            onPaymentSuccess: { paymentId in }
+            paymentResultHandler: paymentResultHandler
         )
     }
 
@@ -51,17 +58,12 @@ enum Preview {
         } else {
             machine = SwishStatechart.makeStateMachine()
         }
-        let networking = KronorSwishPaymentNetworking(
-            env: env,
-            token: token,
-            device: device
-        )
+        let networking = KronorSwishPaymentNetworking(configuration: configuration)
         return SwishPaymentViewModel(
             stateMachine: machine,
             networking: networking,
             returnURL: returnURL,
-            onPaymentFailure: { reason in },
-            onPaymentSuccess: { paymentId in }
+            paymentResultHandler: paymentResultHandler
         )
     }
 }

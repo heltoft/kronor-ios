@@ -59,9 +59,8 @@ class EmbeddedPaymentViewModel: ObservableObject {
     private var paymenRequest: KronorApi.PaymentStatusSubscription.Data.PaymentRequest?
     private var subscription: Cancellable?
 
-    private var paymentMethod: SupportedEmbeddedMethod
-    private var onPaymentFailure: (_ reason: FailureReason) -> ()
-    private var onPaymentSuccess: (_ paymentId: String) -> ()
+    private let paymentMethod: SupportedEmbeddedMethod
+    private let paymentResultHandler: PaymentResultHandler
     internal let sessionURL: URL
     internal let returnURL: URL
     internal let intermediateRedirectURL: URL
@@ -69,36 +68,33 @@ class EmbeddedPaymentViewModel: ObservableObject {
     @Published var state: EmbeddedPaymentStatechart.State
     @Published var embeddedSiteURL: URL?
 
-    init(env: Kronor.Environment,
-         sessionToken: String,
-         stateMachine: EmbeddedPaymentStatechart.EmbeddedPaymentStateMachine,
-         networking: some EmbeddedPaymentNetworking,
-         paymentMethod: SupportedEmbeddedMethod,
-         returnURL: URL,
-         onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-         onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+    init(
+        configuration: ComponentConfiguration,
+        stateMachine: EmbeddedPaymentStatechart.EmbeddedPaymentStateMachine,
+        networking: some EmbeddedPaymentNetworking,
+        paymentMethod: SupportedEmbeddedMethod,
+        paymentResultHandler: @escaping PaymentResultHandler
     ) {
         self.stateMachine = stateMachine
         self.networking = networking
         self.state = stateMachine.state
-        self.onPaymentSuccess = onPaymentSuccess
-        self.onPaymentFailure = onPaymentFailure
+        self.paymentResultHandler = paymentResultHandler
         self.paymentMethod = paymentMethod
 
-        let gatewayURL = env.gatewayURL
+        let gatewayURL = configuration.env.gatewayURL
         var components = URLComponents()
         components.scheme = gatewayURL.scheme
         components.host = gatewayURL.host
         components.path = "/payment"
         components.queryItems = [
-            URLQueryItem(name: "env", value: env.name),
+            URLQueryItem(name: "env", value: configuration.env.name),
             URLQueryItem(name: "paymentMethod", value: paymentMethod.getName()),
-            URLQueryItem(name: "token", value: sessionToken),
-            URLQueryItem(name: "merchantReturnUrl", value: returnURL.absoluteString)
+            URLQueryItem(name: "token", value: configuration.sessionToken),
+            URLQueryItem(name: "merchantReturnUrl", value: configuration.returnURL.absoluteString)
         ]
 
         self.sessionURL = components.url!
-        self.returnURL = returnURL
+        self.returnURL = configuration.returnURL
         
         components.path = "/" + paymentMethod.getName().lowercased() + "-redirect"
         self.intermediateRedirectURL = components.url!
@@ -181,7 +177,7 @@ class EmbeddedPaymentViewModel: ObservableObject {
             Self.logger.trace("performing notifyPaymentFailure")
             self.subscription?.cancel()
             await MainActor.run {
-                self.onPaymentFailure(.declined)
+                self.paymentResultHandler(.failure(.declined))
             }
 
 
@@ -189,7 +185,7 @@ class EmbeddedPaymentViewModel: ObservableObject {
             Self.logger.trace("performing cancelAndNotifyFailure")
             self.subscription?.cancel()
             await MainActor.run {
-                self.onPaymentFailure(.cancelled)
+                self.paymentResultHandler(.failure(.cancelled))
             }
 
             
@@ -198,7 +194,7 @@ class EmbeddedPaymentViewModel: ObservableObject {
             self.subscription?.cancel()
             if let paymentId = self.paymenRequest?.resultingPaymentId {
                 await MainActor.run {
-                    self.onPaymentSuccess(paymentId)
+                    self.paymentResultHandler(.success(paymentId))
                 }
             } else {
                 Self.logger.error("could not find resultingPaymentId before calling onPaymentSuccess")

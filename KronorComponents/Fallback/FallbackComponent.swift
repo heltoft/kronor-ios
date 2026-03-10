@@ -8,32 +8,28 @@
 import SwiftUI
 import Kronor
 
+/// A generic payment component that handles payment methods without a dedicated component.
 public struct FallbackComponent: View {
     let viewModel: EmbeddedPaymentViewModel
-    
-    public init(env: Kronor.Environment,
-                sessionToken: String,
-                paymentMethodName: String,
-                returnURL: URL,
-                device: Kronor.Device? = nil,
-                onPaymentFailure: @escaping (_ reason: FailureReason) -> (),
-                onPaymentSuccess: @escaping (_ paymentId: String) -> ()
+
+    /// Creates a new fallback payment component.
+    /// - Parameters:
+    ///   - configuration: The shared component configuration.
+    ///   - paymentMethodName: The name of the payment method to use.
+    ///   - paymentResultHandler: A closure called with the payment result.
+    public init(
+        configuration: ComponentConfiguration,
+        paymentMethodName: String,
+        paymentResultHandler: @escaping PaymentResultHandler
     ) {
         let machine = EmbeddedPaymentStatechart.makeStateMachine()
-        let networking = KronorEmbeddedPaymentNetworking(
-            env: env,
-            token: sessionToken,
-            device: device
-        )
+        let networking = KronorEmbeddedPaymentNetworking(configuration: configuration)
         let viewModel = EmbeddedPaymentViewModel(
-            env: env,
-            sessionToken: sessionToken,
+            configuration: configuration,
             stateMachine: machine,
             networking: networking,
             paymentMethod: .fallback(name: paymentMethodName),
-            returnURL: returnURL,
-            onPaymentFailure: onPaymentFailure,
-            onPaymentSuccess: onPaymentSuccess
+            paymentResultHandler: paymentResultHandler
         )
 
         self.viewModel = viewModel
@@ -56,15 +52,9 @@ public struct FallbackComponent: View {
 struct FallbackComponent_Previews: PreviewProvider {
     static var previews: some View {
         FallbackComponent(
-            env: Preview.env,
-            sessionToken: Preview.token,
+            configuration: Preview.configuration,
             paymentMethodName: "swish",
-            returnURL: Preview.returnURL,
-            onPaymentFailure: { reason in
-                print("failed: \(reason)")
-            }
-        ) { paymentId in
-            print("done: \(paymentId)")
-        }
+            paymentResultHandler: Preview.paymentResultHandler
+        )
     }
 }
