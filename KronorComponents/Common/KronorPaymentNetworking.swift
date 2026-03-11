@@ -29,7 +29,7 @@ class KronorPaymentNetworking: PaymentNetworking {
     let client: ApolloClient
     let pollingManager: PollingManager
     let env: Kronor.Environment
-    let isWebsocketsEnabled: Bool
+    let isWebSocketsEnabled: Bool
 
     var deviceInfo: KronorApi.AddSessionDeviceInformationInput {
         get async {
@@ -49,7 +49,7 @@ class KronorPaymentNetworking: PaymentNetworking {
             env: configuration.env,
             token: configuration.sessionToken
         )
-        self.isWebsocketsEnabled = configuration.isWebsocketsEnabled
+        self.isWebSocketsEnabled = configuration.isWebSocketsEnabled
         self.pollingManager = PollingManager(pollingInterval: 1)
         self.state = .init(device: configuration.device)
     }
@@ -57,14 +57,14 @@ class KronorPaymentNetworking: PaymentNetworking {
     func subscribeToPaymentStatus(
         resultHandler: @escaping (Result<KronorApi.PaymentStatusSubscription.Data, Error>, KronorApi.APIError?) -> Void
     ) async -> Cancellable {
-        if isWebsocketsEnabled {
+        if isWebSocketsEnabled {
             do {
                 return try await websocketPaymentStatusSubscription(resultHandler: resultHandler)
             } catch {
-                return await pollingPaymentStatusSubscription(resultHandler: resultHandler)
+                return pollingPaymentStatusSubscription(resultHandler: resultHandler)
             }
         } else {
-            return await pollingPaymentStatusSubscription(resultHandler: resultHandler)
+            return pollingPaymentStatusSubscription(resultHandler: resultHandler)
         }
     }
 
@@ -153,7 +153,7 @@ extension KronorPaymentNetworking {
 
     private func pollingPaymentStatusSubscription(
         resultHandler: @escaping (Result<KronorApi.PaymentStatusSubscription.Data, Error>, KronorApi.APIError?) -> Void
-    ) async -> Cancellable {
+    ) -> Cancellable {
         pollingManager.startPolling {
             self.client.fetch(query: KronorApi.PaymentStatusQuery(), cachePolicy: .fetchIgnoringCacheCompletely) { result in
                 resultHandler(
